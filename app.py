@@ -61,6 +61,8 @@ def generate_game():
         return {}
 
 game = generate_game()
+st.subheader("🧬 Debug: AI-data")
+st.json(game)
 
 # === Vis plottet ===
 if game:
@@ -108,7 +110,8 @@ if st.button("🕵️ Thorups afsløring"):
         st.warning("OpenAI-nøgle mangler.")
     else:
         with st.spinner("Inspector Thorup samler trådene..."):
-            afslør_prompt = f"I slutningen af et murder mystery afslører Inspector Thorup at {game['morder']} er morderen. Giv en dramatisk afsløring med motiv, reaktioner og beviser."
+            morder_navn = game.get("morder") or game.get("morderen") or "en ukendt person"
+            afslør_prompt = f"I slutningen af et murder mystery afslører Inspector Thorup at {morder_navn} er morderen. Giv en dramatisk afsløring med motiv, reaktioner og beviser."
             final = openai.ChatCompletion.create(
                 model="gpt-4",
                 messages=[{"role": "user", "content": afslør_prompt}]
